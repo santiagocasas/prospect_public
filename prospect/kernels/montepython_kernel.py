@@ -94,9 +94,9 @@ class MontePythonKernel(BaseKernel):
         for param_name, param in self.param['fixed'].items():
             self.mp['data'].mcmc_parameters[self.prospect_to_mp_name[param_name]]['current'] = param['fixed_value']
         self.mp['data'].update_cosmo_arguments()
-        with contextlib.redirect_stdout(open(self.mp['out_dir'], 'a+')):
-            with contextlib.redirect_stderr(open(self.mp['err_dir'], 'a+')):
-                out = self.mp['compute_lkl'](self.mp['cosmo'], self.mp['data'])
+        # with contextlib.redirect_stdout(open(self.mp['out_dir'], 'a+')):
+            # with contextlib.redirect_stderr(open(self.mp['err_dir'], 'a+')):
+        out = self.mp['compute_lkl'](self.mp['cosmo'], self.mp['data'])
         return -out
 
     def logprior(self, position):
@@ -106,9 +106,9 @@ class MontePythonKernel(BaseKernel):
         # Reads a MontePython .bestfit file
         # If a parameter is not given in the .bestfit file, default value
         # for that parameter will be set
-        with contextlib.redirect_stdout(open(self.mp['out_dir'], 'a+')):
-            with contextlib.redirect_stderr(open(self.mp['err_dir'], 'a+')):
-                self.mp['read_args'](self.mp['data'], config_initial_position)
+        #with contextlib.redirect_stdout(open(self.mp['out_dir'], 'a+')):
+            #with contextlib.redirect_stderr(open(self.mp['err_dir'], 'a+')):
+        self.mp['read_args'](self.mp['data'], config_initial_position)
         initial = {}
         for param_name, param in self.varying_param_dict.items():
             if 'last_accepted' in param:
@@ -126,16 +126,16 @@ class MontePythonKernel(BaseKernel):
 
     def read_covmat(self, config_covmat):
         self.mp['command_line'].cov = config_covmat
-        with contextlib.redirect_stdout(open(self.mp['out_dir'], 'a+')):
-            with contextlib.redirect_stderr(open(self.mp['err_dir'], 'a+')):
-                eigval, eigvec, covmat = self.mp['get_covmat'](self.mp['cosmo'], self.mp['data'], self.mp['command_line'])
+        #with contextlib.redirect_stdout(open(self.mp['out_dir'], 'a+')):
+        #    with contextlib.redirect_stderr(open(self.mp['err_dir'], 'a+')):
+        eigval, eigvec, covmat = self.mp['get_covmat'](self.mp['cosmo'], self.mp['data'], self.mp['command_line'])
         return covmat
 
     def get_default_covmat(self):
         # Extract default from MontePython
-        with contextlib.redirect_stdout(open(self.mp['out_dir'], 'a+')):
-            with contextlib.redirect_stderr(open(self.mp['err_dir'], 'a+')):
-                eigval, eigvec, covmat = self.mp['get_covmat'](self.mp['cosmo'], self.mp['data'], self.mp['command_line'])
+        #with contextlib.redirect_stdout(open(self.mp['out_dir'], 'a+')):
+            #with contextlib.redirect_stderr(open(self.mp['err_dir'], 'a+')):
+        eigval, eigvec, covmat = self.mp['get_covmat'](self.mp['cosmo'], self.mp['data'], self.mp['command_line'])
         return covmat
 
     def get_mp_param_names(self, type):
